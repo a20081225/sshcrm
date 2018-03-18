@@ -1,6 +1,7 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -9,6 +10,22 @@
 <LINK href="${pageContext.request.contextPath }/css/Style.css" type=text/css rel=stylesheet>
 <LINK href="${pageContext.request.contextPath }/css/Manage.css" type=text/css
 	rel=stylesheet>
+
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/my.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        loadSelect("006","level","cust_level.dict_id" <s:if test="#customer.cust_level!=null">,<s:property value="#customer.cust_level.dict_id" /></s:if>);
+        loadSelect("001","industry","cust_industry.dict_id" <s:if test="#customer.cust_industry!=null">,<s:property value="#customer.cust_industry.dict_id" /></s:if>);
+        loadSelect("009","source","cust_source.dict_id" <s:if test="#customer.cust_source!=null">,<s:property value="#customer.cust_source.dict_id" /></s:if>);
+
+
+    });
+
+
+</script>
 
 
 <META content="MSHTML 6.00.2900.3492" name=GENERATOR>
@@ -56,23 +73,16 @@
 														style="WIDTH: 180px" maxLength=50 name="cust_name">
 								</td>
 								<td>客户级别 ：</td>
-								<td>
-								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="cust_level">
+								<td id="level">
 								</td>
 							</TR>
 							
 							<TR>
-								
 								<td>信息来源 ：</td>
-								<td>
-								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="cust_source">
+								<td id="source">
 								</td>
-								<td>联系人：</td>
-								<td>
-								<INPUT class=textbox id=sChannel2
-														style="WIDTH: 180px" maxLength=50 name="cust_linkman">
+								<td>客户行业：</td>
+								<td id="industry">
 								</td>
 							</TR>
 							

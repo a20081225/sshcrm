@@ -915,16 +915,77 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="231" parent="6" name="cst_customer">
+    <table id="231" parent="6" name="base_dict">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="232" parent="6" name="cst_linkman">
+    <table id="232" parent="6" name="cst_customer">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="233" parent="6" name="sys_user">
+    <table id="233" parent="6" name="cst_linkman">
       <Engine>InnoDB</Engine>
     </table>
-    <column id="234" parent="231" name="cust_id">
+    <table id="234" parent="6" name="sys_user">
+      <Engine>InnoDB</Engine>
+    </table>
+    <column id="235" parent="231" name="dict_id">
+      <Position>1</Position>
+      <Comment>数据字典id(主键)</Comment>
+      <DataType>varchar(32)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="236" parent="231" name="dict_type_code">
+      <Position>2</Position>
+      <Comment>数据字典类别代码</Comment>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="237" parent="231" name="dict_type_name">
+      <Position>3</Position>
+      <Comment>数据字典类别名称</Comment>
+      <DataType>varchar(64)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="238" parent="231" name="dict_item_name">
+      <Position>4</Position>
+      <Comment>数据字典项目名称</Comment>
+      <DataType>varchar(64)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="239" parent="231" name="dict_item_code">
+      <Position>5</Position>
+      <Comment>数据字典项目(可为空)</Comment>
+      <DataType>varchar(10)|0</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="240" parent="231" name="dict_sort">
+      <Position>6</Position>
+      <Comment>排序字段</Comment>
+      <DataType>int(10)|0</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="241" parent="231" name="dict_enable">
+      <Position>7</Position>
+      <Comment>1:使用 0:停用</Comment>
+      <DataType>char(1)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="242" parent="231" name="dict_memo">
+      <Position>8</Position>
+      <Comment>备注</Comment>
+      <DataType>varchar(64)|0</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="243" parent="231" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>dict_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="244" parent="232" name="cust_id">
       <Position>1</Position>
       <Comment>客户编号(主键)</Comment>
       <DataType>bigint(32)|0</DataType>
@@ -932,55 +993,55 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="235" parent="231" name="cust_name">
+    <column id="245" parent="232" name="cust_name">
       <Position>2</Position>
       <Comment>客户名称(公司名称)</Comment>
       <DataType>varchar(32)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="236" parent="231" name="cust_source">
+    <column id="246" parent="232" name="cust_source">
       <Position>3</Position>
       <Comment>客户信息来源</Comment>
       <DataType>varchar(32)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="237" parent="231" name="cust_industry">
+    <column id="247" parent="232" name="cust_industry">
       <Position>4</Position>
       <Comment>客户所属行业</Comment>
       <DataType>varchar(32)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="238" parent="231" name="cust_level">
+    <column id="248" parent="232" name="cust_level">
       <Position>5</Position>
       <Comment>客户级别</Comment>
       <DataType>varchar(32)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="239" parent="231" name="cust_linkman">
+    <column id="249" parent="232" name="cust_linkman">
       <Position>6</Position>
       <Comment>联系人</Comment>
       <DataType>varchar(64)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="240" parent="231" name="cust_phone">
+    <column id="250" parent="232" name="cust_phone">
       <Position>7</Position>
       <Comment>固定电话</Comment>
       <DataType>varchar(64)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="241" parent="231" name="cust_mobile">
+    <column id="251" parent="232" name="cust_mobile">
       <Position>8</Position>
       <Comment>移动电话</Comment>
       <DataType>varchar(16)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="242" parent="231" name="PRIMARY">
+    <key id="252" parent="232" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>cust_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="243" parent="232" name="lkm_id">
+    <column id="253" parent="233" name="lkm_id">
       <Position>1</Position>
       <Comment>联系人编号(主键)</Comment>
       <DataType>bigint(32)|0</DataType>
@@ -988,82 +1049,82 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="244" parent="232" name="lkm_name">
+    <column id="254" parent="233" name="lkm_name">
       <Position>2</Position>
       <Comment>联系人姓名</Comment>
       <DataType>varchar(16)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="245" parent="232" name="lkm_cust_id">
+    <column id="255" parent="233" name="lkm_cust_id">
       <Position>3</Position>
       <Comment>客户id</Comment>
       <DataType>bigint(32)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="246" parent="232" name="lkm_gender">
+    <column id="256" parent="233" name="lkm_gender">
       <Position>4</Position>
       <Comment>联系人性别</Comment>
       <DataType>char(1)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="247" parent="232" name="lkm_phone">
+    <column id="257" parent="233" name="lkm_phone">
       <Position>5</Position>
       <Comment>联系人办公电话</Comment>
       <DataType>varchar(16)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="248" parent="232" name="lkm_mobile">
+    <column id="258" parent="233" name="lkm_mobile">
       <Position>6</Position>
       <Comment>联系人手机</Comment>
       <DataType>varchar(16)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="249" parent="232" name="lkm_email">
+    <column id="259" parent="233" name="lkm_email">
       <Position>7</Position>
       <Comment>联系人邮箱</Comment>
       <DataType>varchar(64)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="250" parent="232" name="lkm_qq">
+    <column id="260" parent="233" name="lkm_qq">
       <Position>8</Position>
       <Comment>联系人qq</Comment>
       <DataType>varchar(16)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="251" parent="232" name="lkm_position">
+    <column id="261" parent="233" name="lkm_position">
       <Position>9</Position>
       <Comment>联系人职位</Comment>
       <DataType>varchar(16)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="252" parent="232" name="lkm_memo">
+    <column id="262" parent="233" name="lkm_memo">
       <Position>10</Position>
       <Comment>联系人备注</Comment>
       <DataType>varchar(512)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="253" parent="232" name="FK_cst_linkman_lkm_cust_id">
+    <index id="263" parent="233" name="FK_cst_linkman_lkm_cust_id">
       <ColNames>lkm_cust_id</ColNames>
     </index>
-    <key id="254" parent="232" name="PRIMARY">
+    <key id="264" parent="233" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>lkm_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="255" parent="232" name="FK_cst_linkman_lkm_cust_id">
+    <foreign-key id="265" parent="233" name="FK_cst_linkman_lkm_cust_id">
       <ColNames>lkm_cust_id</ColNames>
       <RefSchemaName>ssh_crm</RefSchemaName>
       <RefTableName>cst_customer</RefTableName>
       <RefColNames>cust_id</RefColNames>
     </foreign-key>
-    <foreign-key id="256" parent="232" name="FKh9yp1nql5227xxcopuxqx2e7q">
+    <foreign-key id="266" parent="233" name="FKh9yp1nql5227xxcopuxqx2e7q">
       <ColNames>lkm_cust_id</ColNames>
       <RefSchemaName>ssh_crm</RefSchemaName>
       <RefTableName>cst_customer</RefTableName>
       <RefColNames>cust_id</RefColNames>
     </foreign-key>
-    <column id="257" parent="233" name="user_id">
+    <column id="267" parent="234" name="user_id">
       <Position>1</Position>
       <Comment>用户id</Comment>
       <DataType>bigint(32)|0</DataType>
@@ -1071,35 +1132,35 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="258" parent="233" name="user_code">
+    <column id="268" parent="234" name="user_code">
       <Position>2</Position>
       <Comment>用户账号</Comment>
       <DataType>varchar(32)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="259" parent="233" name="user_name">
+    <column id="269" parent="234" name="user_name">
       <Position>3</Position>
       <Comment>用户名称</Comment>
       <DataType>varchar(64)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="260" parent="233" name="user_password">
+    <column id="270" parent="234" name="user_password">
       <Position>4</Position>
       <Comment>用户密码</Comment>
       <DataType>varchar(32)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="261" parent="233" name="user_state">
+    <column id="271" parent="234" name="user_state">
       <Position>5</Position>
       <Comment>1:正常,0:暂停</Comment>
       <DataType>char(1)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="262" parent="233" name="PRIMARY">
+    <key id="272" parent="234" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>user_id</ColNames>
       <Primary>1</Primary>

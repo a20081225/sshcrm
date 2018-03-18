@@ -109,7 +109,7 @@
 														<s:property value="#cust.cust_name" />
 													</TD>
 													<TD>
-													<s:property value="#cust.cust_level" />
+													<s:property value="#cust.cust_level.dict_item_name" />
 													</TD>
 													<TD>
 													<s:property value="#cust.cust_source" />

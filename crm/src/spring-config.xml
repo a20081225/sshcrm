@@ -25,7 +25,7 @@
     </bean>
 
     <!-- 配置通知 -->
-    <!-- <tx:advice id="txAdvice" transaction-manager="transactionManager" >
+    <tx:advice id="txAdvice" transaction-manager="transactionManager" >
         <tx:attributes>
             <tx:method name="save*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false" />
             <tx:method name="persist*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false" />
@@ -35,15 +35,16 @@
             <tx:method name="remove*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false" />
             <tx:method name="get*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="true" />
             <tx:method name="find*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="true" />
+            <tx:method name="*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false" />
         </tx:attributes>
-    </tx:advice> -->
+    </tx:advice>
     <!-- 配置将通知织入目标对象
     配置切点
     配置切面 -->
-    <!-- <aop:config>
-        <aop:pointcut expression="execution(* cn.itcast.service.impl.*ServiceImpl.*(..))" id="txPc"/>
+    <aop:config>
+        <aop:pointcut expression="execution(* com.yw.crm.service.impl.*ServiceImpl.*(..))" id="txPc"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPc" />
-    </aop:config> -->
+    </aop:config>
     <!-- ========================================================================================= -->
     <!-- 开启注解事务 -->
     <tx:annotation-driven transaction-manager="transactionManager" />
@@ -85,12 +86,18 @@
     <bean name="customerAction" class="com.yw.crm.action.CustomerAction" scope="prototype" >
         <property name="cs" ref="customerService" ></property>
     </bean>
+    <bean name="baseDictAction" class="com.yw.crm.action.BaseDictAction" scope="prototype" >
+        <property name="baseDictService" ref="baseDictService" ></property>
+    </bean>
     <!-- service -->
     <bean name="userService" class="com.yw.crm.service.impl.UserServiceImpl" >
         <property name="ud" ref="userDao" ></property>
     </bean>
     <bean name="customerService" class="com.yw.crm.service.impl.CustomerServiceImpl" >
-        <property name="cd" ref="customerDao" ></property>
+         <property name="cd" ref="customerDao" ></property>
+    </bean>
+    <bean name="baseDictService" class="com.yw.crm.service.impl.BaseDictServiceImpl" >
+        <property name="baseDictDao" ref="baseDictDao" ></property>
     </bean>
     <!-- dao -->
     <bean name="userDao" class="com.yw.crm.dao.impl.UserDaoImpl" >
@@ -98,6 +105,10 @@
         <property name="sessionFactory" ref="sessionFactory" ></property>
     </bean>
     <bean name="customerDao" class="com.yw.crm.dao.impl.CustomerDaoImpl" >
+        <!-- 注入sessionFactory -->
+        <property name="sessionFactory" ref="sessionFactory" ></property>
+    </bean>
+    <bean name="baseDictDao" class="com.yw.crm.dao.impl.BaseDictDaoImpl" >
         <!-- 注入sessionFactory -->
         <property name="sessionFactory" ref="sessionFactory" ></property>
     </bean>

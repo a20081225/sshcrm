@@ -1,6 +1,6 @@
 package com.yw.crm.action;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
@@ -32,6 +32,13 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 		//2 将PageBean放入request域,转发到列表页面显示
 		ActionContext.getContext().put("pageBean", pb);
 		return "list";
+	}
+
+
+	//保存
+	public String add() throws Exception {
+		cs.save(customer);
+		return "toList";
 	}
 
 	@Override
