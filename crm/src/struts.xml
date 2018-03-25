@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE struts PUBLIC
         "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
-        "http://struts.apache.org/dtds/struts-2.3.dtd">
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <struts>
     <!-- #  struts.objectFactory = spring	将action的创建交给spring容器
@@ -10,6 +10,24 @@
     <constant name="struts.objectFactory" value="spring"></constant>
     <constant name="struts.enable.DynamicMethodInvocation" value="true" />
     <package name="crm" namespace="/" extends="struts-default" >
+        <!--注册拦截器-->
+        <interceptors>
+            <interceptor name="privilegeInterceptor" class="com.yw.crm.utils.PrivilegeInterceptor"></interceptor>
+            <!--配置拦截器-->
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="privilegeInterceptor">
+                    <param name="excludeMethods">login,regist</param>
+                </interceptor-ref>
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+        <!--指定默认拦截-->
+        <default-interceptor-ref name="myStack"></default-interceptor-ref>
+
+        <!--全局配置-->
+        <global-results>
+            <result name="toLogin" type="redirect">/login.jsp</result>
+        </global-results>
         <global-exception-mappings>
             <exception-mapping result="error" exception="java.lang.RuntimeException"></exception-mapping>
         </global-exception-mappings>
@@ -22,18 +40,43 @@
                 完全由spring管理action生命周期,包括Action的创建
                 注意:需要手动组装依赖属性
          -->
+        <!--Struts2.5以后,需要添加allowed-methods属性-->
         <action name="UserAction_*" class="userAction" method="{1}" >
             <result name="toHome" type="redirect" >/index.htm</result>
             <result name="error" >/login.jsp</result>
+            <result name="regist" >/regist.jsp</result>
+            <allowed-methods>login,regist</allowed-methods>
         </action>
 
         <action name="CustomerAction_*" class="customerAction" method="{1}" >
             <result name="list"  >/jsp/customer/list.jsp</result>
+            <result name="toSelect"  >/jsp/customer/select.jsp</result>
+            <result name="toEdit"  >/jsp/customer/edit.jsp</result>
             <result name="toList" type="redirectAction"  >
                 <param name="namespace">/</param>
                 <param name="actionName">CustomerAction_list</param>
             </result>
-            <allowed-methods>add</allowed-methods>
+            <allowed-methods>list,add,update,toEdit,toSelect</allowed-methods>
+        </action>
+
+        <action name="LinkManAction_*" class="linkManAction" method="{1}" >
+            <result name="list"  >/jsp/linkman/list.jsp</result>
+            <result name="toEdit"  >/jsp/linkman/edit.jsp</result>
+            <result name="toList" type="redirectAction"  >
+                <param name="namespace">/</param>
+                <param name="actionName">LinkManAction_list</param>
+            </result>
+            <allowed-methods>list,add,update,toEdit</allowed-methods>
+        </action>
+
+        <action name="SaleVisitAction_*" class="saleVisitAction" method="{1}" >
+            <result name="list"  >/jsp/salevisit/list.jsp</result>
+            <result name="toEdit"  >/jsp/salevisit/edit.jsp</result>
+            <result name="toList" type="redirectAction"  >
+                <param name="namespace">/</param>
+                <param name="actionName">SaleVisitAction_list</param>
+            </result>
+            <allowed-methods>list,add,update,toEdit</allowed-methods>
         </action>
         <!--数据字典-->
         <action name="BaseDictAction" class="baseDictAction" method="execute" >

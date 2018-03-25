@@ -1,5 +1,8 @@
 package com.yw.crm.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Customer {
 	
 	/*
@@ -39,7 +42,6 @@ public class Customer {
 	public BaseDict getCust_level() {
 		return cust_level;
 	}
-
 	public void setCust_source(BaseDict cust_source) {
 		this.cust_source = cust_source;
 	}
@@ -48,6 +50,15 @@ public class Customer {
 	}
 	public void setCust_level(BaseDict cust_level) {
 		this.cust_level = cust_level;
+	}
+
+	//拜访记录
+	private Set<SaleVisit> saleVisits = new HashSet<SaleVisit>();
+	public Set<SaleVisit> getSaleVisits() {
+		return saleVisits;
+	}
+	public void setSaleVisits(Set<SaleVisit> saleVisits) {
+		this.saleVisits = saleVisits;
 	}
 
 	public Long getCust_id() {

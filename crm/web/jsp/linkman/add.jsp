@@ -9,13 +9,26 @@
 <LINK href="${pageContext.request.contextPath }/css/Style.css" type=text/css rel=stylesheet>
 <LINK href="${pageContext.request.contextPath }/css/Manage.css" type=text/css
 	rel=stylesheet>
-
+	<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.4.4.min.js"></script>
+	<SCRIPT language=javascript>
+        function openwindow(url,name,iWidth,iHeight)
+        {
+            var url;                            //转向网页的地址;
+            var name;                           //网页名称，可为空;
+            var iWidth;                         //弹出窗口的宽度;
+            var iHeight;                        //弹出窗口的高度;
+            //window.screen.height获得屏幕的高，window.screen.width获得屏幕的宽
+            var iTop = (window.screen.height-30-iHeight)/2;       //获得窗口的垂直位置;
+            var iLeft = (window.screen.width-10-iWidth)/2;        //获得窗口的水平位置;
+            window.open(url,name,'height='+iHeight+',,innerHeight='+iHeight+',width='+iWidth+',innerWidth='+iWidth+',top='+iTop+',left='+iLeft+',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+        }
+	</SCRIPT>
 
 <META content="MSHTML 6.00.2900.3492" name=GENERATOR>
 </HEAD>
 <BODY>
 	<FORM id=form1 name=form1
-		action="${pageContext.request.contextPath }/AddLinkManServlet"
+		action="${pageContext.request.contextPath }/LinkManAction_add"
 		method=post>
 		
 
@@ -48,7 +61,11 @@
 						<TABLE cellSpacing=0 cellPadding=5  border=0>
 							<tr>
 								<td>所属客户：</td>
-								<td colspan="3"><input type="text" name="cust_id" style="WIDTH: 180px"/></td>
+								<td colspan="3">
+									<input type="hidden" name="customer.cust_id" style="WIDTH: 180px" id="cust_id"/>
+									<input type="text"  style="WIDTH: 180px" id="cust_name"/>
+									<input type="button" value="选择客户" onclick="openwindow('${pageContext.request.contextPath}/CustomerAction_toSelect','',800,220)"/>
+								</td>
 							</tr>
 							<TR>
 								<td>联系人名称：</td>

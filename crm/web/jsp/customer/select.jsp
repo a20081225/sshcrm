@@ -25,6 +25,16 @@
 		//2 提交表单
 			$("#pageForm").submit();
 	};
+
+	function selectCustomer(cust_id,cust_name) {
+	    //获取页面document对象
+		var doc = window.opener.document;
+		//对隐藏域赋值
+		doc.getElementById("cust_id").value = cust_id;
+        doc.getElementById("cust_name").value = cust_name;
+        //关闭窗口
+		window.close();
+    };
 </SCRIPT>
 
 <META content="MSHTML 6.00.2900.3492" name=GENERATOR>
@@ -64,7 +74,7 @@
 								<TR>
 									<TD height=25>
 									<FORM id="pageForm" name="customerForm"
-										action="${pageContext.request.contextPath }/CustomerAction_list"
+										action="${pageContext.request.contextPath }/CustomerAction_toSelect"
 										method=post>
 										<!-- 隐藏域.当前页码 -->
 										<input type="hidden" name="currentPage" id="currentPageInput" value="<s:property value="#pageBean.currentPage" />" />
@@ -124,9 +134,7 @@
 													<s:property value="#cust.cust_mobile" />
 													</TD>
 													<TD>
-													<a href="${pageContext.request.contextPath }/CustomerAction_toEdit?cust_id=<s:property value="#cust.cust_id" />">修改</a>
-													&nbsp;&nbsp;
-													<a href="${pageContext.request.contextPath }/customerServlet?method=delete&custId=${customer.cust_id}">删除</a>
+														<input type="button" value="选择" onclick="selectCustomer(<s:property value="#cust.cust_id" />,'<s:property value="#cust.cust_name" />')"/>
 													</TD>
 												</TR>
 												</s:iterator>

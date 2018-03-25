@@ -31,9 +31,14 @@
 <META content="MSHTML 6.00.2900.3492" name=GENERATOR>
 </HEAD>
 <BODY>
+	<!-- 文件上传页面3个要求:
+			1.表单必须post提交
+			2.表单提交类型enctype.必须多段式.
+			3.文件上传使用<input type="file" /> 组件
+	 -->
 	<FORM id=form1 name=form1
 		action="${pageContext.request.contextPath }/CustomerAction_add"
-		method=post>
+		method=post enctype="multipart/form-data">
 		
 
 		<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0>
@@ -62,10 +67,7 @@
 								<TD height=2></TD>
 							</TR>
 						</TABLE>
-						
 						<TABLE cellSpacing=0 cellPadding=5  border=0>
-						  
-						    
 							<TR>
 								<td>客户名称：</td>
 								<td>
@@ -85,10 +87,7 @@
 								<td id="industry">
 								</td>
 							</TR>
-							
 							<TR>
-								
-								
 								<td>固定电话 ：</td>
 								<td>
 								<INPUT class=textbox id=sChannel2
@@ -100,6 +99,12 @@
 														style="WIDTH: 180px" maxLength=50 name="cust_mobile">
 								</td>
 							</TR>
+							<TR>
+								<td>图片上传 ：</td>
+								<td>
+									<input type="file" name="photo" />
+								</td>
+							</TR>
 							
 							<tr>
 								<td rowspan=2>
@@ -108,8 +113,6 @@
 								</td>
 							</tr>
 						</TABLE>
-						
-						
 					</TD>
 					<TD width=15 background="${pageContext.request.contextPath }/images/new_023.jpg">
 					<IMG src="${pageContext.request.contextPath }/images/new_023.jpg" border=0></TD>

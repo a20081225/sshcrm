@@ -41,9 +41,15 @@
 		<property name="cust_phone" column="cust_phone" ></property>
 		<property name="cust_mobile" column="cust_mobile" ></property>
 
-		<!--多对一-->
+		<!--多对一，struts2.5以后需要添加lazy属性-->
 		<many-to-one name="cust_source" column="cust_source" class="BaseDict" lazy="false"></many-to-one>
 		<many-to-one name="cust_industry" column="cust_industry" class="BaseDict" lazy="false"></many-to-one>
 		<many-to-one name="cust_level" column="cust_level" class="BaseDict" lazy="false"></many-to-one>
+
+		<!--一对多-->
+		<set name="saleVisits">
+			<key column="visit_cust_id"></key>
+			<one-to-many class="SaleVisit"></one-to-many>
+		</set>
 	</class>
 </hibernate-mapping>

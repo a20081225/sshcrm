@@ -5,10 +5,10 @@
       <configuration>
         <datasource-map>
           <unit-entry name="noname-spring-config.xml@3386" value="6ddbe85a-d9b2-41a1-a05c-5652ec1746a0" />
-          <unit-entry name="noname-spring-config.xml@3473" value="6ddbe85a-d9b2-41a1-a05c-5652ec1746a0" />
         </datasource-map>
         <naming-strategy-map>
           <unit-entry name="noname-spring-config.xml@3386" />
+          <unit-entry name="noname-spring-config.xml@3473" />
         </naming-strategy-map>
       </configuration>
     </facet>

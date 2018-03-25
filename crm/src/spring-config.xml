@@ -76,6 +76,11 @@
         </property>
         <!-- 引入orm元数据,指定orm元数据所在的包路径,spring会自动读取包中的所有配置 -->
         <property name="mappingDirectoryLocations" value="classpath:com/yw/crm/domain" ></property>
+        <property name="mappingLocations">
+            <list>
+                <value>classpath:com/yw/crm/domain/SaleVisit.hbm.xml</value>
+            </list>
+        </property>
     </bean>
 
     <!-- action -->
@@ -85,6 +90,12 @@
     </bean>
     <bean name="customerAction" class="com.yw.crm.action.CustomerAction" scope="prototype" >
         <property name="cs" ref="customerService" ></property>
+    </bean>
+    <bean name="linkManAction" class="com.yw.crm.action.LinkManAction" scope="prototype" >
+        <property name="lms" ref="linkManService" ></property>
+    </bean>
+    <bean name="saleVisitAction" class="com.yw.crm.action.SaleVisitAction" scope="prototype" >
+        <property name="svs" ref="saleVisitService" ></property>
     </bean>
     <bean name="baseDictAction" class="com.yw.crm.action.BaseDictAction" scope="prototype" >
         <property name="baseDictService" ref="baseDictService" ></property>
@@ -96,6 +107,12 @@
     <bean name="customerService" class="com.yw.crm.service.impl.CustomerServiceImpl" >
          <property name="cd" ref="customerDao" ></property>
     </bean>
+    <bean name="linkManService" class="com.yw.crm.service.impl.LinkManServiceImpl" >
+        <property name="lmd" ref="linkManDao" ></property>
+    </bean>
+    <bean name="saleVisitService" class="com.yw.crm.service.impl.SaleVisitServiceImpl" >
+        <property name="svd" ref="saleVisitDao" ></property>
+    </bean>
     <bean name="baseDictService" class="com.yw.crm.service.impl.BaseDictServiceImpl" >
         <property name="baseDictDao" ref="baseDictDao" ></property>
     </bean>
@@ -106,6 +123,12 @@
     </bean>
     <bean name="customerDao" class="com.yw.crm.dao.impl.CustomerDaoImpl" >
         <!-- 注入sessionFactory -->
+        <property name="sessionFactory" ref="sessionFactory" ></property>
+    </bean>
+    <bean name="linkManDao" class="com.yw.crm.dao.impl.LinkManDaoImpl" >
+        <property name="sessionFactory" ref="sessionFactory" ></property>
+    </bean>
+    <bean name="saleVisitDao" class="com.yw.crm.dao.impl.SaleVisitDaoImpl" >
         <property name="sessionFactory" ref="sessionFactory" ></property>
     </bean>
     <bean name="baseDictDao" class="com.yw.crm.dao.impl.BaseDictDaoImpl" >

@@ -1,16 +1,18 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib  prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<TITLE>客户列表</TITLE> 
+<TITLE>访问记录列表</TITLE> 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <LINK href="${pageContext.request.contextPath }/css/Style.css" type=text/css rel=stylesheet>
 <LINK href="${pageContext.request.contextPath }/css/Manage.css" type=text/css
 	rel=stylesheet>
 <script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/my.js"></script>
 <SCRIPT language=javascript>
 	function changePage(pageNum){
 			//1 将页码的值放入对应表单隐藏域中
@@ -25,6 +27,17 @@
 		//2 提交表单
 			$("#pageForm").submit();
 	};
+    function openwindow(url,name,iWidth,iHeight)
+    {
+        var url;                            //转向网页的地址;
+        var name;                           //网页名称，可为空;
+        var iWidth;                         //弹出窗口的宽度;
+        var iHeight;                        //弹出窗口的高度;
+        //window.screen.height获得屏幕的高，window.screen.width获得屏幕的宽
+        var iTop = (window.screen.height-30-iHeight)/2;       //获得窗口的垂直位置;
+        var iLeft = (window.screen.width-10-iWidth)/2;        //获得窗口的水平位置;
+        window.open(url,name,'height='+iHeight+',,innerHeight='+iHeight+',width='+iWidth+',innerWidth='+iWidth+',top='+iTop+',left='+iLeft+',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+    }
 </SCRIPT>
 
 <META content="MSHTML 6.00.2900.3492" name=GENERATOR>
@@ -52,7 +65,7 @@
 					<TD vAlign=top width="100%" bgColor=#ffffff>
 						<TABLE cellSpacing=0 cellPadding=5 width="100%" border=0>
 							<TR>
-								<TD class=manageHead>当前位置：客户管理 &gt; 客户列表</TD>
+								<TD class=manageHead>当前位置：访问记录管理 &gt; 记录列表</TD>
 							</TR>
 							<TR>
 								<TD height=2></TD>
@@ -62,9 +75,9 @@
 							width="100%" align=center border=0>
 							<TBODY>
 								<TR>
-									<TD height=25>
-									<FORM id="pageForm" name="customerForm"
-										action="${pageContext.request.contextPath }/CustomerAction_list"
+									<TD height=25>	
+										<FORM id="pageForm" name="customerForm"
+										action="${pageContext.request.contextPath }/SaleVisitAction_list"
 										method=post>
 										<!-- 隐藏域.当前页码 -->
 										<input type="hidden" name="currentPage" id="currentPageInput" value="<s:property value="#pageBean.currentPage" />" />
@@ -74,8 +87,11 @@
 											<TBODY>
 												<TR>
 													<TD>客户名称：</TD>
-													<TD><INPUT class=textbox id=sChannel2
-														style="WIDTH: 80px" maxLength=50 name="cust_name" value="${param.cust_name}"></TD>
+													<TD>
+														<input type="hidden" name="customer.cust_id" id="cust_id" value="${param['customer.cust_id']}" />
+														<INPUT class=textbox style="WIDTH: 80px" maxLength=50 name="cust_name"  id="cust_name" value="${param['cust_name']}" >
+														<input type="button" value="选择客户" onclick="openwindow('${pageContext.request.contextPath}/CustomerAction_toSelect','',800,220)" />
+													</TD>
 													
 													<TD><INPUT class=button id=sButton2 type=submit
 														value=" 筛选 " name=sButton2></TD>
@@ -94,39 +110,30 @@
 											<TBODY>
 												<TR
 													style="FONT-WEIGHT: bold; FONT-STYLE: normal; BACKGROUND-COLOR: #eeeeee; TEXT-DECORATION: none">
+													<TD>业务员名称</TD>
 													<TD>客户名称</TD>
-													<TD>客户级别</TD>
-													<TD>客户来源</TD>
-													<TD>联系人</TD>
-													<TD>电话</TD>
-													<TD>手机</TD>
+													<TD>访问时间</TD>
+													<TD>访问人</TD>
+													<TD>访问地址</TD>
+													<TD>访问详情</TD>
+													<TD>下次访问时间</TD>
 													<TD>操作</TD>
 												</TR>
-												<s:iterator value="#pageBean.list" var="cust" >
-												<TR 		
+												<s:iterator value="#pageBean.list" >
+												<TR
 													style="FONT-WEIGHT: normal; FONT-STYLE: normal; BACKGROUND-COLOR: white; TEXT-DECORATION: none">
+													<TD><s:property value="user.user_name" /></TD>
+													<TD><s:property value="customer.cust_name" /></TD>
+													<TD><s:property value="visit_time_s" /></TD>
+													<TD><s:property value="visit_interviewee" /></TD>
+													<TD><s:property value="visit_addr" /></TD>
+													<TD><s:property value="visit_detail" /></TD>
+													<TD><s:property value="visit_nexttime_s" /></TD>
 													<TD>
-														<s:property value="#cust.cust_name" />
-													</TD>
-													<TD>
-													<s:property value="#cust.cust_level.dict_item_name" />
-													</TD>
-													<TD>
-													<s:property value="#cust.cust_source" />
-													</TD>
-													<TD>
-													<s:property value="#cust.cust_linkman" />
-													</TD>
-													<TD>
-													<s:property value="#cust.cust_phone" />
-													</TD>
-													<TD>
-													<s:property value="#cust.cust_mobile" />
-													</TD>
-													<TD>
-													<a href="${pageContext.request.contextPath }/CustomerAction_toEdit?cust_id=<s:property value="#cust.cust_id" />">修改</a>
-													&nbsp;&nbsp;
-													<a href="${pageContext.request.contextPath }/customerServlet?method=delete&custId=${customer.cust_id}">删除</a>
+															<!-- 没有传递参数,显示删除和修改操作 -->
+														<a href="${pageContext.request.contextPath }/SaleVisitAction_toEdit?visit_id=<s:property value="visit_id" />">修改</a>
+														&nbsp;&nbsp;
+														<a href="javascript:void(0)" onclick="deleteConfirm('<s:property value="cust_name" />','${pageContext.request.contextPath }/CustomerAction_delete?cust_id=<s:property value="cust_id" />');" >删除</a>
 													</TD>
 												</TR>
 												</s:iterator>
@@ -178,6 +185,5 @@
 				</TR>
 			</TBODY>
 		</TABLE>
-	
 </BODY>
 </HTML>
