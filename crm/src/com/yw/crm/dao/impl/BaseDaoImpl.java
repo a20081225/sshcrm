@@ -1,13 +1,13 @@
 package com.yw.crm.dao.impl;
 
-import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
-
 import com.yw.crm.dao.BaseDao;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
+
+import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 
@@ -75,7 +75,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 	public List<T> getPageList(DetachedCriteria dc, Integer start, Integer pageSize) {
 		
 		List<T> list = (List<T>) getHibernateTemplate().findByCriteria(dc, start, pageSize);
-		
+//		List<T> list = (List<T>) getHibernateTemplate().findByCriteria(dc);
 		return list;
 	}
 

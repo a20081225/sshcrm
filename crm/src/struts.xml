@@ -10,23 +10,23 @@
     <constant name="struts.objectFactory" value="spring"></constant>
     <constant name="struts.enable.DynamicMethodInvocation" value="true" />
     <package name="crm" namespace="/" extends="struts-default" >
-        <!--注册拦截器-->
-        <interceptors>
-            <interceptor name="privilegeInterceptor" class="com.yw.crm.utils.PrivilegeInterceptor"></interceptor>
-            <!--配置拦截器-->
-            <interceptor-stack name="myStack">
-                <interceptor-ref name="privilegeInterceptor">
-                    <param name="excludeMethods">login,regist</param>
-                </interceptor-ref>
-                <interceptor-ref name="defaultStack"></interceptor-ref>
-            </interceptor-stack>
-        </interceptors>
-        <!--指定默认拦截-->
-        <default-interceptor-ref name="myStack"></default-interceptor-ref>
+        <!--&lt;!&ndash;注册拦截器&ndash;&gt;-->
+        <!--<interceptors>-->
+            <!--<interceptor name="privilegeInterceptor" class="com.yw.crm.utils.PrivilegeInterceptor"></interceptor>-->
+            <!--&lt;!&ndash;配置拦截器&ndash;&gt;-->
+            <!--<interceptor-stack name="myStack">-->
+                <!--<interceptor-ref name="privilegeInterceptor">-->
+                    <!--<param name="excludeMethods">login,regist</param>-->
+                <!--</interceptor-ref>-->
+                <!--<interceptor-ref name="defaultStack"></interceptor-ref>-->
+            <!--</interceptor-stack>-->
+        <!--</interceptors>-->
+        <!--&lt;!&ndash;指定默认拦截&ndash;&gt;-->
+        <!--<default-interceptor-ref name="myStack"></default-interceptor-ref>-->
 
         <!--全局配置-->
         <global-results>
-            <result name="toLogin" type="redirect">/login.jsp</result>
+            <result name="toLogin" type="redirect">/error.jsp</result>
         </global-results>
         <global-exception-mappings>
             <exception-mapping result="error" exception="java.lang.RuntimeException"></exception-mapping>
@@ -42,10 +42,10 @@
          -->
         <!--Struts2.5以后,需要添加allowed-methods属性-->
         <action name="UserAction_*" class="userAction" method="{1}" >
-            <result name="toHome" type="redirect" >/index.htm</result>
-            <result name="error" >/login.jsp</result>
-            <result name="regist" >/regist.jsp</result>
-            <allowed-methods>login,regist</allowed-methods>
+            <result name="toHome" type="redirect" >/index.jsp</result>
+            <result name="error" >/error.jsp</result>
+            <!--<result name="regist" >/error.jsp</result>-->
+            <allowed-methods>login,regist,list,toEdit,update,delete</allowed-methods>
         </action>
 
         <action name="CustomerAction_*" class="customerAction" method="{1}" >
@@ -56,7 +56,8 @@
                 <param name="namespace">/</param>
                 <param name="actionName">CustomerAction_list</param>
             </result>
-            <allowed-methods>list,add,update,toEdit,toSelect</allowed-methods>
+            <result name="industryCount"  >/jsp/customer/industryCount.jsp</result>
+            <allowed-methods>list,add,update,toEdit,toSelect,industryCount</allowed-methods>
         </action>
 
         <action name="LinkManAction_*" class="linkManAction" method="{1}" >

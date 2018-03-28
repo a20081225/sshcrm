@@ -47,7 +47,7 @@
     </aop:config>
     <!-- ========================================================================================= -->
     <!-- 开启注解事务 -->
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!--<tx:annotation-driven transaction-manager="transactionManager" />-->
 
     <!-- 将SessionFactory配置到spring容器中 -->
     <!-- 加载配置方案1:仍然使用外部的hibernate.cfg.xml配置信息 -->

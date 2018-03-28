@@ -4,9 +4,11 @@ import com.yw.crm.dao.BaseDictDao;
 import com.yw.crm.domain.BaseDict;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+//@Repository("baseDictDao")
 public class BaseDictDaoImpl extends BaseDaoImpl<BaseDict> implements BaseDictDao  {
 
         @Override

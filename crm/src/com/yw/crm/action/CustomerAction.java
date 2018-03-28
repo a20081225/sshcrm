@@ -1,18 +1,21 @@
 package com.yw.crm.action;
 
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
-
+import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
-
 import com.yw.crm.domain.Customer;
 import com.yw.crm.service.CustomerService;
 import com.yw.crm.utils.PageBean;
+import org.apache.commons.lang.StringUtils;
+import org.apache.struts2.ServletActionContext;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CustomerAction extends ActionSupport implements ModelDriven<Customer> {
 	private Customer customer = new Customer();
@@ -42,9 +45,15 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 		PageBean pb = cs.getPageBean(dc,currentPage,pageSize);
 		//2 将PageBean放入request域,转发到列表页面显示
 		ActionContext.getContext().put("pageBean", pb);
-		return "list";
+		Map map  = new HashMap();
+		map.put("total", pb.getTotalCount());
+		map.put("rows", pb.getList());
+		//将map转换为json
+		String json = JSON.toJSONString(map);
+		ServletActionContext.getResponse().setContentType("application/json;charset=utf-8");
+		ServletActionContext.getResponse().getWriter().write(json);
+		return null;
 	}
-
 
 	//保存
 	public String add() throws Exception {
@@ -82,6 +91,12 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 		return "toSelect";
 	}
 
+	//统计
+	public String industryCount()throws Exception{
+		List<Object[]> list = cs.getIndustryCount();
+		ActionContext.getContext().put("list", list);
+		return "industryCount";
+	}
 
 	@Override
 	public Customer getModel() {

@@ -1,13 +1,12 @@
 package com.yw.crm.service.impl;
 
-import java.util.List;
-
+import com.yw.crm.dao.CustomerDao;
 import com.yw.crm.domain.Customer;
 import com.yw.crm.service.CustomerService;
 import com.yw.crm.utils.PageBean;
 import org.hibernate.criterion.DetachedCriteria;
 
-import com.yw.crm.dao.CustomerDao;
+import java.util.List;
 
 public class CustomerServiceImpl implements CustomerService {
 	private CustomerDao cd;
@@ -39,6 +38,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void update(Customer customer) {
         cd.update(customer);
+    }
+
+    @Override
+    public List<Object[]> getIndustryCount() {
+        return cd.getIndustryCount();
     }
 
     public void setCd(CustomerDao cd) {

@@ -5,10 +5,13 @@
       <configuration>
         <datasource-map>
           <unit-entry name="noname-spring-config.xml@3386" value="6ddbe85a-d9b2-41a1-a05c-5652ec1746a0" />
+          <unit-entry name="noname-spring-config.xml@3473" />
+          <unit-entry name="noname-spring-config.xml@3480" value="6ddbe85a-d9b2-41a1-a05c-5652ec1746a0" />
         </datasource-map>
         <naming-strategy-map>
           <unit-entry name="noname-spring-config.xml@3386" />
           <unit-entry name="noname-spring-config.xml@3473" />
+          <unit-entry name="noname-spring-config.xml@3480" />
         </naming-strategy-map>
       </configuration>
     </facet>
@@ -89,5 +92,6 @@
     <orderEntry type="library" exported="" name="Maven: xml-apis:xml-apis:1.0.b2" level="project" />
     <orderEntry type="library" name="json-lib-2.4-jdk15" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.5" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.7" level="project" />
   </component>
 </module>

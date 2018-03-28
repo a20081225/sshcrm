@@ -13,7 +13,7 @@
 		<property name="user_state"  ></property>
 
 		<!--一对多-->
-		<set name="saleVisits">
+		<set name="saleVisits" lazy="false">
 			<key column="visit_user_id"></key>
 			<one-to-many class="SaleVisit"></one-to-many>
 		</set>

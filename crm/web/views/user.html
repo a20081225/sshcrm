@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>客户信息管理</title>
+    <link rel="stylesheet" type="text/css" href="../ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../ui/themes/icon.css">
+    <script type="text/javascript" src="../ui/jquery.min.js"></script>
+    <script type="text/javascript" src="../ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../ui/locale/easyui-lang-zh_CN.js"></script>
+
+    <script>
+        //点击提交按钮触发该方法提交表单
+        function submitForm(){
+// submit the form
+            $('#addUserList').submit();
+        }
+        $(function() {
+            //-------------------------------------------------------------------------
+            $('#addUser').window('close'); //页面加载完成,确保窗口关闭
+            //-------------------------------------------------------------------------
+            $('#addUserList').form({
+                url: '${pageContext.request.contextPath}/UserAction_regist',
+                onSubmit: function () {
+                    // do some check
+                    // return false to prevent submit;
+                    return true;//让表单直接提交
+                },
+                success: function (data) { //提交成功后调用的方法
+                    $('#addUser').window('close');//提交成功关闭窗口
+                    $('#User').datagrid('reload'); //提交成功,重新加载列表数据
+                    $('#addUserList').form('clear');//提交成功后,清空表单
+                }
+            });
+        })
+            function submitForm2() {
+// submit the form
+                $('#updateUserList').submit();
+            }
+            $(function () {
+                //-------------------------------------------------------------------------
+                $('#updateUser').window('close'); //页面加载完成,确保窗口关闭
+                //-------------------------------------------------------------------------
+                $('#updateUserList').form({
+                    url: '${pageContext.request.contextPath}/UserAction_update',
+                    onSubmit: function () {
+                        // do some check
+                        // return false to prevent submit;
+                        return true;//让表单直接提交
+                    },
+                    success: function (data) { //提交成功后调用的方法
+                        $('#updateUser').window('close');//提交成功关闭窗口
+                        $('#User').datagrid('reload'); //提交成功,重新加载列表数据
+                        $('#updateUserList').form('clear');//提交成功后,清空表单
+                    },
+                    error:function (data) {
+                        $.messager.alert('错误', data, 'error');
+                    }
+                });
+                //--------------------------------------------------------------------------
+                $('#User').datagrid({
+                    title: '用户列表', //表格标题
+                    singleSelect: true, //只允许单选
+                    iconCls: 'icon-tip',//表格标题图标
+                    //width:700, //宽度
+                    //height:350, //高度
+                    nowrap: true,//某列数据较长时,是否需要换行
+                    striped: true,//是否隔行变色
+                    collapsible: false,//是否可以折叠表格
+                    url: '${pageContext.request.contextPath}/UserAction_list',//指定表格数据加载的路径
+                    sortName: 'user_id',//指定可以使用哪列进行排序
+                    sortOrder: 'asc',//指定默认排序规则 asc/desc
+                    remoteSort: false,//是否支持远程
+                    idField: 'user_id', //那一列是id列
+                    frozenColumns: [[
+                        {field: 'ck', checkbox: true},
+                        {title: '用户id', field: 'user_id', width: 80, sortable: true}
+                    ]],
+                    columns: [[
+                        {field: 'user_name', title: '用户名', width: 120},
+                        {field: 'user_code', title: '登录名', width: 220}
+                    ]],
+                    pagination: true,
+                    rownumbers: true,
+                    toolbar: [{ //配置工具栏
+                        id: 'btnadd',
+                        text: '添加用户',
+                        iconCls: 'icon-add',
+                        handler: function () {
+                            // $('#btndelete').linkbutton('enable');
+                            //打开前清空表单
+                            $('#addUserList').form('clear');
+                            //打开表单窗口
+                            $('#addUser').window('open');
+                        }
+                    }, {
+                        id: 'btnupdate',
+                        text: '修改用户',
+                        iconCls: 'icon-save',
+                        handler: function () {
+
+                            //获得被选中的用户的id
+                            var user_id = getSelected();
+                            if (!user_id) {
+                                // alert("请选择用户!");
+                                $.messager.alert('消息提醒','请选择用户!','error');
+                                return;
+
+                            }else{$('#btndelete').linkbutton('enable');}
+                            //根据id回显数据
+                            $('#updateUserList').form('load', '${pageContext.request.contextPath}/UserAction_toEdit?user_id=' + user_id);
+                            //清空密码输入框
+
+                            //打开编辑窗口
+                            $('#updateUser').window('open');
+
+                        }
+                    }, '-', {
+                        id: 'btndelete',
+                        text: '删除用户',
+                        disabled: true, //禁用属性
+                        iconCls: 'icon-cut',
+                        handler: function () {
+                            $('#btndelete').linkbutton('enable');//点击后按钮是否可以继续点击
+                            //获得被选中的用户id
+                            //获得被选中的用户的id
+                            var user_id = getSelected();
+                            //判断id不能为空
+                             if (!user_id) {
+                                 $.messager.alert('消息提醒','请选择用户!','error');
+                                 return;
+                             }
+                            //调用ajax异步发送请求删除用户
+                            $.get("${pageContext.request.contextPath}/UserAction_delete?user_id=" + user_id, function (data) {
+                                //删除成功后,刷新列表
+                                $('#User').datagrid('reload'); //提交成功,重新加载列表数据
+                            });
+                        }
+                    }]
+                });
+//            var page = $('#test').datagrid('options').pageNumber;//pageNumber为datagrid的当前页码
+//            var rows = $('#test').datagrid('options').pageSize;//多少条数据
+                var p = $('#User').datagrid('getPager');
+                $(p).pagination({
+                    onBeforeRefresh: function () {
+                        //alert('before refresh');
+                    }
+                });
+                $('#User').datagrid({
+                    onCheck:function(index,row){
+                        var selected = $('#User').datagrid('getSelected');
+                        if (selected) {
+                            $('#btndelete').linkbutton('enable');
+                        }
+                    }
+                })
+            });
+            function resize() {
+                $('#User').datagrid('resize', {
+                    width: 700,
+                    height: 400
+                });
+            }
+
+            //获得被选中的
+            function getSelected() {
+                var selected = $('#User').datagrid('getSelected');
+                if (selected) {
+                    return selected.user_id;
+                }
+            }
+
+            function getSelections() {
+                var ids = [];
+                var rows = $('#User').datagrid('getSelections');
+                for (var i = 0; i < rows.length; i++) {
+                    ids.push(rows[i].code);
+                }
+                alert(ids.join(':'));
+            }
+
+            function clearSelections() {
+                $('#User').datagrid('clearSelections');
+            }
+
+            function selectRow() {
+                $('#User').datagrid('selectRow', 2);
+            }
+
+            function selectRecord() {
+                $('#User').datagrid('selectRecord', '002');
+            }
+
+            function unselectRow() {
+                $('#User').datagrid('unselectRow', 2);
+            }
+
+            function mergeCells() {
+                $('#User').datagrid('mergeCells', {
+                    index: 2,
+                    field: 'addr',
+                    rowspan: 2,
+                    colspan: 2
+                });
+            }
+
+    </script>
+</head>
+<body>
+<table id="User"></table>
+<!-- --------------------------------------------------------------------------- -->
+<div id="addUser" class="easyui-window" title="添加用户" iconCls="icon-save" style="width:500px;height:200px;padding:5px;">
+    <div style="background:#fafafa;padding:10px;width:300px;height:300px;">
+        <form id="addUserList" method="post" novalidate>
+            <input  type="hidden" name="user_id"  >
+            <div>
+                <label for="user_code">登陆名称:</label>
+                <input class="easyui-textbox"  style="padding:12px" type="text" name="user_code" id="user_code" required="true"></input>
+            </div>
+            <div>
+                <label for="user_password">登陆密码:</label>
+                <input class="easyui-textbox" style="padding:12px" type="password" name="user_password" id="user_password"  data-options="prompt:'Password',iconCls:'icon-lock'" required="true"></input>
+            </div>
+            <div>
+                <label for="user_name">用户昵称:</label>
+                <input class="easyui-textbox" style="padding:12px" type="text" name="user_name" id="user_name" data-options="prompt:'Username',iconCls:'icon-man'"  required="true"></input>
+            </div>
+            <div>
+                <!--<input class="easyui-button" value="提交"  style="padding:5px 0px;" onclick="submitForm();" >-->
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" style="padding:5px 0px;" onclick="submitForm()">提交</a>
+            </div>
+        </form>
+    </div>
+</div>
+    <div id="updateUser" class="easyui-window" title="修改用户" iconCls="icon-save" style="width:500px;height:200px;padding:5px;">
+        <div style="background:#fafafa;padding:10px;width:300px;height:300px;">
+            <form id="updateUserList" method="post" novalidate>
+                <input  type="hidden" name="user_id"  >
+                <div>
+                    <label for="user_code2">登陆名称:</label>
+                    <input class="easyui-validatebox" type="text" name="user_code" id="user_code2" required="true"  readonly="true"></input>
+                </div>
+                <div>
+                    <label for="user_password2">登陆密码:</label>
+                    <input class="easyui-textbox" type="password" name="user_password" id="user_password2" data-options="prompt:'Password',iconCls:'icon-lock'" required="true"></input>
+                </div>
+                <div>
+                    <label for="user_name2">用户昵称:</label>
+                    <input class="easyui-textbox" type="text" name="user_name" id="user_name2" data-options="prompt:'Username',iconCls:'icon-man'" required="true"></input>
+                </div>
+                <div>
+                    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" style="padding:5px 0px;" onclick="submitForm2()">保存</a>
+                </div>
+            </form>
+        </div>
+
+</div>
+</body>
+</html>

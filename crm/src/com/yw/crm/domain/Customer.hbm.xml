@@ -47,7 +47,7 @@
 		<many-to-one name="cust_level" column="cust_level" class="BaseDict" lazy="false"></many-to-one>
 
 		<!--一对多-->
-		<set name="saleVisits">
+		<set name="saleVisits" lazy="false">
 			<key column="visit_cust_id"></key>
 			<one-to-many class="SaleVisit"></one-to-many>
 		</set>

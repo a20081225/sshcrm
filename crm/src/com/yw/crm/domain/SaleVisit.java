@@ -1,5 +1,7 @@
 package com.yw.crm.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -30,8 +32,10 @@ private Date visit_time             ;
 private Date visit_nexttime         ;
 
 //表达所属客户对象 多对一
+@JSONField(serialize=false)
 private Customer customer;
 //表达所属用户对象 多对一
+@JSONField(serialize=false)
 private User	user;
 
 public String getVisit_id() {
