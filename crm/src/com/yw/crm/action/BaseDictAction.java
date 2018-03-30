@@ -37,4 +37,5 @@ public class BaseDictAction extends ActionSupport {
 		ServletActionContext.getResponse().getWriter().write(json);
 		return null;
 	}
+
 }

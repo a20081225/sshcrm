@@ -49,6 +49,8 @@
         </action>
 
         <action name="CustomerAction_*" class="customerAction" method="{1}" >
+            <result name="error" >/error.jsp</result>
+            <result name="input" >/error.jsp</result>
             <result name="list"  >/jsp/customer/list.jsp</result>
             <result name="toSelect"  >/jsp/customer/select.jsp</result>
             <result name="toEdit"  >/jsp/customer/edit.jsp</result>
@@ -57,7 +59,7 @@
                 <param name="actionName">CustomerAction_list</param>
             </result>
             <result name="industryCount"  >/jsp/customer/industryCount.jsp</result>
-            <allowed-methods>list,add,update,toEdit,toSelect,industryCount</allowed-methods>
+            <allowed-methods>list,add,update,toEdit,toSelect,industryCount,search</allowed-methods>
         </action>
 
         <action name="LinkManAction_*" class="linkManAction" method="{1}" >

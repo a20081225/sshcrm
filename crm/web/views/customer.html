@@ -1,310 +1,355 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>客户信息管理</title>
-<link rel="stylesheet" type="text/css" href="../ui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="../ui/themes/icon.css">
-<script type="text/javascript" src="../ui/jquery.min.js"></script>
-<script type="text/javascript" src="../ui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../ui/locale/easyui-lang-zh_CN.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>客户信息管理</title>
+    <link rel="stylesheet" type="text/css" href="../ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../ui/themes/icon.css">
+    <script type="text/javascript" src="../ui/jquery.min.js"></script>
+    <script type="text/javascript" src="../ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../ui/locale/easyui-lang-zh_CN.js"></script>
 
-<script type="text/javascript"><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>客户信息管理</title>
-<link rel="stylesheet" type="text/css" href="../ui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="../ui/themes/icon.css">
-<script type="text/javascript" src="../ui/jquery.min.js"></script>
-<script type="text/javascript" src="../ui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../ui/locale/easyui-lang-zh_CN.js"></script>
+    <script>
+        //点击提交按钮触发该方法提交表单
+        // var pagesize;
+        // var pagenumber;
+        function searchForm() {
+            $('#searchCustomerList').submit();
+        }
+        $(function() {
+            //-------------------------------------------------------------------------
+            $('#searchCustomerList').form({
+                url:'${pageContext.request.contextPath}/CustomerAction_search',
+                // queryParams:{rows: pagesize,page:pagenumber},
+                // rows: pagesize,
+                // page:pagenumber,
+                onSubmit: function (param) {
+                    // var url =  '${pageContext.request.contextPath}/CustomerAction_search';
+                    // $('#Customer').datagrid('options').url = url;
+                    // $('#Customer').datagrid("reload");
+                    param.rows = $("#Customer" ).datagrid("getPager" ).data("pagination" ).options.pageSize;
+                    param.page = $("#Customer" ).datagrid("getPager" ).data("pagination" ).options.pageNumber;
+                   // alert(pagesize);
+                    return true;
+                },
+                success: function (data) {
+                    //提交成功,重新加载列表数据
+                    $('#Customer').datagrid("loadData", $.parseJSON(data));
+                }
+            });
+        })
+        function submitForm(){
+// submit the form
+            $('#addCustomerList').submit();
+        }
+        $(function() {
+            //-------------------------------------------------------------------------
+            $('#addCustomer').window('close'); //页面加载完成,确保窗口关闭
+            //-------------------------------------------------------------------------
+            $('#addCustomerList').form({
+                url: '${pageContext.request.contextPath}/CustomerAction_add',
+                onSubmit: function () {
+                    // do some check
+                    // return false to prevent submit;
+                    return true;//让表单直接提交
+                },
+                success: function (data) { //提交成功后调用的方法
+                    $('#addCustomer').window('close');//提交成功关闭窗口
+                    $('#Customer').datagrid('reload'); //提交成功,重新加载列表数据
+                    $('#addCustomerList').form('clear');//提交成功后,清空表单
+                }
+            });
+        })
+            function submitForm2() {
+// submit the form
+                $('#updateCustomerList').submit();
+            }
+            $(function () {
+                //-------------------------------------------------------------------------
+                $('#updateCustomer').window('close'); //页面加载完成,确保窗口关闭
+                //-------------------------------------------------------------------------
+                $('#updateCustomerList').form({
+                    url: '${pageContext.request.contextPath}/CustomerAction_update',
+                    onSubmit: function () {
+                        // do some check
+                        // return false to prevent submit;
+                        return true;//让表单直接提交
+                    },
+                    success: function (data) { //提交成功后调用的方法
+                        $('#updateCustomer').window('close');//提交成功关闭窗口
+                        $('#Customer').datagrid('reload'); //提交成功,重新加载列表数据
+                        $('#updateCustomerList').form('clear');//提交成功后,清空表单
+                    },
+                    error:function (data) {
+                        $.messager.alert('错误', data, 'error');
+                    }
+                });
 
-<script type="text/javascript">
-$(function(){
-	
-	var columns=[[
-	  		    {field:'custName',title:'客户名称',width:200},
-	  		    {field:'custSource',title:'客户来源',width:150,formatter:function(value,row,index){
-	  		    	if(row.baseDictByCustSource){
-	  		    		return row.baseDictByCustSource.dictItemName;
-	  		    	}
-	  		    }},
-	  		    {field:'custIndustry',title:'所属行业',width:150,formatter:function(value,row,index){
-	  		    	if(row.baseDictByCustIndustry){
-	  		    		return row.baseDictByCustIndustry.dictItemName;
-	  		    	}
-	  		    }},
-	  		   {field:'custLevel',title:'客户级别',width:150,formatter:function(value,row,index){
-	  		    	if(row.baseDictByCustLevel){
-	  		    		return row.baseDictByCustLevel.dictItemName;
-	  		    	}
-	  		    }},
-	  		  {field:'custPhone',title:'固定电话',width:100},
-	  		  {field:'custMobile',title:'移动电话',width:100},
-			    {field:'-',title:'操作',width:100,formatter:function(value,row,index)
-			    	{
-			    		return "<a href='#' onclick='edit("+row.custId+")'>修改</a> <a href='#' onclick='del("+row.custId+")'>删除</a>";
-			    	}}		    
-			          ]];
-	//加载datagrid
-	$('#grid').datagrid({
-		url:'${pageContext.request.contextPath}/CustomerAction_list',
-		columns:columns,
-		pagination:true,
-		singleSelect:true,
-		toolbar: [{
-			iconCls: 'icon-add',
-			text:'增加',
-			handler: add
-		}]
 
-	});
+                //--------------------------------------------------------------------------
+                $('#Customer').datagrid({
+                    title: '客户列表', //表格标题
+                    singleSelect: true, //只允许单选
+                    iconCls: 'icon-tip',//表格标题图标
+                    //width:700, //宽度
+                    //height:350, //高度
+                    nowrap: true,//某列数据较长时,是否需要换行
+                    striped: true,//是否隔行变色
+                    collapsible: false,//是否可以折叠表格
+                    url: '${pageContext.request.contextPath}/CustomerAction_list',//指定表格数据加载的路径
+                    sortName: 'cust_id',//指定可以使用哪列进行排序
+                    sortOrder: 'asc',//指定默认排序规则 asc/desc
+                    remoteSort: false,//是否支持远程
+                    idField: 'cust_id', //那一列是id列
+                    frozenColumns: [[
+                        {field: 'ck', checkbox: true},
+                        {title: '客户编号', field: 'cust_id', width: 80, sortable: true ,hidden:true}
+                    ]],
+                    columns: [[
+                        {field: 'cust_name', title: '客户名称', width: 120},
+                        {field: 'cust_source', title: '客户信息来源', width: 220,formatter:function(value,row,index){
+                    if(row.cust_source){
+                        return row.cust_source.dict_item_name;
+                    }}},
+                        {field: 'cust_industry', title: '客户所属行业', width: 220,formatter:function(value,row,index){
+                                if(row.cust_industry){
+                                    return row.cust_industry.dict_item_name;
+                                }}},
+                        {field: 'cust_level', title: '客户级别', width: 220,formatter:function(value,row,index){
+                                if(row.cust_level){
+                                    return row.cust_level.dict_item_name;
+                                }}},
+                        {field: 'cust_linkman', title: '联系人', width: 220},
+                        {field: 'cust_phone', title: '固定电话', width: 220},
+                        {field: 'cust_mobile', title: '移动电话', width: 220}
+                    ]],
+                    pagination: true,
+                    rownumbers: true,
+                    toolbar: [{ //配置工具栏
+                        id: 'btnadd',
+                        text: '添加客户',
+                        iconCls: 'icon-add',
+                        handler: function () {
+                            // $('#btndelete').linkbutton('enable');
+                            //打开前清空表单
+                            $('#addCustomerList').form('clear');
+                            //打开表单窗口
+                            $('#addCustomer').window('open');
+                        }
+                    }, {
+                        id: 'btnupdate',
+                        text: '修改客户',
+                        iconCls: 'icon-save',
+                        handler: function () {
+                            //获得被选中的客户的id
+                            var cust_id = getSelected();
+                            if (!cust_id) {
+                                // alert("请选择客户!");
+                                $.messager.alert('消息提醒','请选择客户!','error');
+                                return;
 
-	
-});
+                            }else{$('#btndelete').linkbutton('enable');}
+                            //根据id回显数据
+                            $('#updateCustomerList').form('load', '${pageContext.request.contextPath}/CustomerAction_toEdit?cust_id=' + cust_id);
+                            $('#updateCustomerList').form({onLoadSuccess:function(value,row,index) {
+                                    if (value.cust_source) {
+                                        $('#cust_source').combobox('setValue', value.cust_source.dict_id).combobox('setText', value.cust_source.dict_item_name)
+                                    }
+                                    if (value.cust_level) {
+                                        $('#cust_level').combobox('setValue', value.cust_level.dict_id).combobox('setText', value.cust_level.dict_item_name)
+                                    }
+                                    if (value.cust_industry) {
+                                        $('#cust_industry').combobox('setValue', value.cust_industry.dict_id).combobox('setText', value.cust_industry.dict_item_name)
+                                    }
+                                }
+                            });
+                            //打开编辑窗口
+                            $('#updateCustomer').window('open');
 
-//操作方法
-var method;
-//保存客户
-function save(){
-	if(method == 'add'){
-		//添加客户提交
-		addsubmit();
-		
-	}else{
-		//修改客户提交
-		editsubmit();
-	}
-}
-//新增客户
-function add(){
-	$('#customerForm').form('clear');
-	$('#customerWindow').window({modal: true});
-	$('#customerWindow').window('open');	
-	//当前操作方法为添加
-	method="add";
+                        }
+                    }, '-', {
+                        id: 'btndelete',
+                        text: '删除客户',
+                        disabled: true, //禁用属性
+                        iconCls: 'icon-cut',
+                        handler: function () {
+                            $('#btndelete').linkbutton('disable');//点击后按钮是否可以继续点击
+                            //获得被选中的客户id
+                            //获得被选中的客户的id
+                            var cust_id = getSelected();
+                            //判断id不能为空
+                             if (!cust_id) {
+                                 $.messager.alert('消息提醒','请选择客户!','error');
+                                 return;
+                             }
+                            //调用ajax异步发送请求删除客户
+                            $.get("${pageContext.request.contextPath}/CustomerAction_delete?cust_id=" + cust_id, function (data) {
+                                //删除成功后,刷新列表
+                                $('#Customer').datagrid('reload'); //提交成功,重新加载列表数据
+                            });
+                        }
+                    }]
+                });
+//            var page = $('#test').datagrid('options').pageNumber;//pageNumber为datagrid的当前页码
+//            var rows = $('#test').datagrid('options').pageSize;//多少条数据
+                var p = $('#Customer').datagrid('getPager');
+                $(p).pagination({
+                    onBeforeRefresh: function () {
+                        //alert('before refresh');
+                    }
+                });
+                $('#Customer').datagrid({
+                    toolbar:"#searchCustomer",
+                    onCheck:function(index,row){
+                        var selected = $('#Customer').datagrid('getSelected');
+                        if (selected) {
+                            $('#btndelete').linkbutton('enable');
+                        }
+                    }
+                })
+            });
+            function resize() {
+                $('#Customer').datagrid('resize', {
+                    width: 700,
+                    height: 400
+                });
+            }
 
-}
-//新增客户提交
-function addsubmit(){
-	
-	//绑定添加客户保存按钮
-		//alert(0);
-		//var formData=getFormData('addCustomerForm');
-		/* $.ajax({
-			url:'../customer/add.action',
-			data:formData,
-			type:'post',
-			dataType:'json',
-			success:function(value)
-			{
-				alert(value);
-				if(value.success)
-				{					
-					$('#formWindow').window('close');
-					$('#grid').datagrid('reload');
-				}
-				$.messager.alert('提示',value.message);				
-			}
-		});	 */
-		$('#customerForm').form('submit',{    
-			url:'../customer/add.action',
-		    onSubmit: function(){    
-		        // do some check    
-		        // return false to prevent submit;    
-		    },    
-		    success:function(data){
-		    	var data = eval('(' + data + ')');  // 将json串转为js对象 
-		    	if(data.success)
-				{					
-					$('#customerWindow').window('close');
-					$('#grid').datagrid('reload');
-				}
-				$.messager.alert('提示',data.message);		
-		    }    
-		});    
-		// submit the form    
-		//$('#addCustomerForm').submit();  
-	
-}
-//删除客户
-function del(custId){
-	$.messager.confirm("提示","确定要删除吗？",function(value){
-		if(value)
-		{
-			//alert(custId);
-			$.ajax({
-				url:'../customer/delete.action?custId='+custId,
-				dataType:'json',
-				success:function(value)
-				{
-					$.messager.alert('提示',value.message);
-					if(value.success)
-					{
-						$('#grid').datagrid('reload');
-					}			
-				}				
-			});	
-		}
-	});
-	
-	
-}
-/**
- * 修改 页面
- */
-function edit(custId)
-{
-	$('#customerForm').form('clear');
-	$('#customerForm').form('load','../customer/getById.action?custId='+custId);
-	//$('#customerForm').form('load',{"baseDictByCustIndustry":{"dictEnable":"1","dictId":"2","dictItemName":"电子商务","dictSort":2,"dictTypeCode":"001","dictTypeName":"客户行业"},"baseDictByCustLevel":{"dictEnable":"1","dictId":"22","dictItemName":"普通客户","dictSort":1,"dictTypeCode":"006","dictTypeName":"客户级别"},"baseDictByCustSource":{"dictEnable":"1","dictId":"7","dictItemName":"网络营销","dictSort":2,"dictTypeCode":"002","dictTypeName":"客户信息来源"},"custId":23,"custLinkman":"王总","custMobile":"1333333","custName":"山东黑马程序员","custPhone":"32432432"});
-	
-	$('#customerForm').form('load','../customer/getDetailById.action?custId='+custId);
-	$('#customerWindow').window({modal: true});
-	$('#customerWindow').window('open');
-	method="update";
+            //获得被选中的
+            function getSelected() {
+                var selected = $('#Customer').datagrid('getSelected');
+                if (selected) {
+                    return selected.cust_id;
+                }
+            }
 
-}
-//修改客户提交
-function editsubmit()
-{
-	//绑定修改客户保存按钮
-		//alert(99);
-		/* var formData=getFormData('editCustomerForm');
-		$.ajax({
-			url:'../customer/update.action',
-			data:formData,
-			type:'post',
-			dataType:'json',
-			success:function(value)
-			{
-				alert(value);
-				if(value.success)
-				{					
-					$('#editCustomerWindow').window('close');
-					$('#grid').datagrid('reload');
-				}
-				$.messager.alert('提示',value.message);				
-			}
-		});	 */
-		 $('#customerForm').form('submit',{    
-			url:'../customer/update.action',
-		    onSubmit: function(){    
-		        // do some check    
-		        // return false to prevent submit;    
-		    },    
-		    success:function(data){
-		    	var data = eval('(' + data + ')');  // 将json串转为js对象 
-		    	if(data.success)
-				{					
-		    		$('#customerWindow').window('close');
-					$('#grid').datagrid('reload');
-				}
-				$.messager.alert('提示',data.message);		
-		    }    
-		});   
-		// submit the form    
-		//$('#editCustomerForm').submit();  
-		 
-}
-//查询
-function query(){
-	var formData=getFormData('searchForm');
-	$('#grid').datagrid('load',formData);	
-}
-/**
- * 将表单数据封装为json
- * @param form
- * @returns
- */
-function getFormData(form) {  
-    var formValues = $("#" + form).serialize();  
-  
-    //关于jquery的serialize方法转换空格为+号的解决方法  
-    formValues = formValues.replace(/\+/g," ");   // g表示对整个字符串中符合条件的都进行替换  
-    var temp =  decodeURIComponent(JSON.stringify(conveterParamsToJson(formValues)));  
-    var queryParam = JSON.parse(temp);  
-    return queryParam;  
-}  
-function conveterParamsToJson(paramsAndValues) {  
-    var jsonObj = {};  
-  
-    var param = paramsAndValues.split("&");  
-    for ( var i = 0; param != null && i < param.length; i++) {  
-        var para = param[i].split("=");  
-        jsonObj[para[0]] = para[1];  
-    }  
-  
-    return jsonObj;  
-}  
-</script>
+            function getSelections() {
+                var ids = [];
+                var rows = $('#Customer').datagrid('getSelections');
+                for (var i = 0; i < rows.length; i++) {
+                    ids.push(rows[i].code);
+                }
+                alert(ids.join(':'));
+            }
+
+            function clearSelections() {
+                $('#Customer').datagrid('clearSelections');
+            }
+
+            function selectRow() {
+                $('#Customer').datagrid('selectRow', 2);
+            }
+
+            function selectRecord() {
+                $('#Customer').datagrid('selectRecord', '002');
+            }
+
+            function unselectRow() {
+                $('#Customer').datagrid('unselectRow', 2);
+            }
+
+            function mergeCells() {
+                $('#Customer').datagrid('mergeCells', {
+                    index: 2,
+                    field: 'addr',
+                    rowspan: 2,
+                    colspan: 2
+                });
+            }
+
+    </script>
 </head>
 <body>
-<div class="easyui-panel">
-<form id="searchForm">
-     <table cellpadding="5">
-     	<tr>
-     		<td>客户名称：</td>
-     		<td><input name="custName" /></td>
-     		<td>客户来源：</td>
-     		<td><input name="baseDictByCustSource.dictId" class="easyui-combobox" data-options="url:'../system/dictListByType.action?typecode=002',textField:'dictItemName',valueField:'dictId',editable:false"/></td>
-     		<td>所属行业：</td>
-     		<td><input name="baseDictByCustIndustry.dictId" class="easyui-combobox" data-options="url:'../system/dictListByType.action?typecode=001',textField:'dictItemName',valueField:'dictId',editable:false"/></td>
-     		<td>客户级别：</td>
-     		<td><input name="baseDictByCustLevel.dictId" class="easyui-combobox" data-options="url:'../system/dictListByType.action?typecode=006',textField:'dictItemName',valueField:'dictId',editable:false"/></td>
-     	</tr>
-     </table>
-
-	<button type="button" id="btnSearch" onclick="query()">查询</button>
-</form>
+<table id="Customer"></table>
+<!-- --------------------------------------------------------------------------- -->
+<div id="searchCustomer" style="padding:2px 5px;">
+    <form id="searchCustomerList" method="post" novalidate>
+        客户名称:<input  type="text" name="cust_name" style="width:110px">
+        客户来源: <input name="cust_source.dict_id" id ="search_cust_source" class="easyui-combobox" data-options="url:'${pageContext.request.contextPath}/BaseDictAction?dict_type_code=9',textField:'dict_item_name',valueField:'dict_id',editable:false" style="width:110px">
+        所属行业: <input name="cust_industry.dict_id" id ="search_cust_industry" class="easyui-combobox" data-options="url:'${pageContext.request.contextPath}/BaseDictAction?dict_type_code=1',textField:'dict_item_name',valueField:'dict_id',editable:false" style="width:110px">
+        客户级别:<input name="cust_level.dict_id" id ="search_cust_level" class="easyui-combobox" data-options="url:'${pageContext.request.contextPath}/BaseDictAction?dict_type_code=6',textField:'dict_item_name',valueField:'dict_id',editable:false" style="width:110px">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" onclick="searchForm()">查询</a>
+    </form>
 </div>
-<table id="grid"></table>
+<div id="addCustomer" class="easyui-window" title="添加客户" iconCls="icon-save" style="width:550px;height:270px;padding:5px;">
+    <div style="background:#fafafa;padding:10px;width:505px;height:180px;">
+        <form id="addCustomerList" method="post" novalidate>
+            <input  type="hidden" name="cust_id"  >
+            <table cellpadding="5">
+                <tr>
+                    <td>客户名称:</td>
+                    <td><input  type="text" name="cust_name" required="true"></input></td>
+                    <td>客户来源:</td>
+                    <td>
+                        <input name="cust_source.dict_id" class="easyui-combobox" data-options="url:'${pageContext.request.contextPath}/BaseDictAction?dict_type_code=9',textField:'dict_item_name',valueField:'dict_id',editable:false" required="true"/>
+                    </td>
+                </tr>
 
-<div id="customerWindow" class="easyui-window" title="客户信息" 
-	style="width: 550px;height: 300px" data-options="closed:true">
-	<form id="customerForm" method="post">
-		  <input name="custId" type="hidden"> 
-		  <table cellpadding="5">
-		  	<tr>
-		  		<td>客户名称:</td>
-		  		<td><input  type="text" name="cust_name" ></input></td>
-		  		<td>客户来源:</td>
-		  		<td>
-		  			<input name="baseDictByCustSource.dictId" class="easyui-combobox" data-options="url:'../system/dictListByType.action?typecode=002',textField:'dictItemName',valueField:'dictId',editable:false"/>
-		  		</td>
-		  	</tr>
-		  
-		  	<tr>
-		  		<td>所属行业:</td>
-		  		<td><input name="baseDictByCustIndustry.dictId" id="baseDictByCustIndustry.dictId"/></td>
-		  		<td>客户级别:</td>
-		  		<td><input name="baseDictByCustLevel.dictId" class="easyui-combobox" data-options="url:'../system/dictListByType.action?typecode=006',textField:'dictItemName',valueField:'dictId',editable:false"/></td>
-		  	</tr>
-		  	<tr>
-		  		<td>联系人:</td>
-		  		<td><input name="cust_linkman" /></td>
-		  		<td>固定电话:</td>
-		  		<td><input name="cust_phone" /></td>
-		  	</tr>
-		  	<tr>
-		  		<td>移动电话:</td>
-		  		<td><input name="cust_mobile" /></td>
-		  		<td>邮政编码:</td>
-		  		<td><input name="customerDetailVo.custZip" /></td>
-		  	</tr>
-		  	<tr>
-		  		<td>联系地址:</td>
-		  		<td colspan="3"><input name="customerDetailVo.custAddress" style="width:430px;"/></td>
-		  	</tr>
-		  	<tr>
-		  		<td colspan="4">
-		  			<button id="customerBtn" type="button" onclick="save()">保存</button>
-		  		</td>
-		  	</tr>
-		  </table>
-	</form>
+                <tr>
+                    <td>所属行业:</td>
+                    <td><input name="cust_industry.dict_id"  class="easyui-combobox" data-options="url:'${pageContext.request.contextPath}/BaseDictAction?dict_type_code=1',textField:'dict_item_name',valueField:'dict_id',editable:false" required="true"/></td>
+                    <td>客户级别:</td>
+                    <td><input name="cust_level.dict_id" class="easyui-combobox" data-options="url:'${pageContext.request.contextPath}/BaseDictAction?dict_type_code=6',textField:'dict_item_name',valueField:'dict_id',editable:false" required="true"/></td>
+                </tr>
+                <tr>
+                    <td>联系人:</td>
+                    <td><input name="cust_linkman" /></td>
+                    <td>固定电话:</td>
+                    <td><input name="cust_phone" /></td>
+                </tr>
+                <tr>
+                    <td>移动电话:</td>
+                    <td><input name="cust_mobile" /></td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" style="padding:5px 0px;" onclick="submitForm()">提交</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </div>
+    <div id="updateCustomer" class="easyui-window" title="修改客户" iconCls="icon-save" style="width:550px;height:270px;padding:5px;">
+        <div style="background:#fafafa;padding:10px;width:505px;height:180px;">
+            <form id="updateCustomerList" method="post" novalidate>
+                <input  type="hidden" name="cust_id"  >
+                <table cellpadding="5">
+                    <tr>
+                        <td>客户名称:</td>
+                        <td><input  type="text" name="cust_name" required="true"></input></td>
+                        <td>客户来源:</td>
+                        <td>
+                            <!--<input  type="text" name="cust_source.dict_id" >-->
+                            <input name="cust_source.dict_id" id = "cust_source" class="easyui-combobox" data-options="url:'${pageContext.request.contextPath}/BaseDictAction?dict_type_code=9',textField:'dict_item_name',valueField:'dict_id',editable:false" required="true" />
+                        </td>
+                    </tr>
 
+                    <tr>
+                        <td>所属行业:</td>
+                        <td><input name="cust_industry.dict_id" id = "cust_industry" class="easyui-combobox" data-options="url:'${pageContext.request.contextPath}/BaseDictAction?dict_type_code=1',textField:'dict_item_name',valueField:'dict_id',editable:false" required="true"/></td>
+                        <td>客户级别:</td>
+                        <td><input name="cust_level.dict_id" id = "cust_level" class="easyui-combobox" data-options="url:'${pageContext.request.contextPath}/BaseDictAction?dict_type_code=6',textField:'dict_item_name',valueField:'dict_id',editable:false" required="true"/></td>
+                    </tr>
+                    <tr>
+                        <td>联系人:</td>
+                        <td><input name="cust_linkman" /></td>
+                        <td>固定电话:</td>
+                        <td><input name="cust_phone" /></td>
+                    </tr>
+                    <tr>
+                        <td>移动电话:</td>
+                        <td><input name="cust_mobile" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" style="padding:5px 0px;" onclick="submitForm2()">保存</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+</div>
 </body>
 </html>

@@ -17,4 +17,6 @@ public interface CustomerService {
 	void update(Customer customer);
 	//按行业统计客户数量
 	List<Object[]> getIndustryCount();
+
+    void deleteById(Long cust_id);
 }

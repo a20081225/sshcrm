@@ -45,6 +45,11 @@ public class CustomerServiceImpl implements CustomerService {
         return cd.getIndustryCount();
     }
 
+    @Override
+    public void deleteById(Long cust_id) {
+        cd.delete(cust_id);
+    }
+
     public void setCd(CustomerDao cd) {
 		this.cd = cd;
 	}
