@@ -1,9 +1,9 @@
 package com.yw.crm.dao;
 
+import org.hibernate.criterion.DetachedCriteria;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.hibernate.criterion.DetachedCriteria;
 
 public interface BaseDao<T> {
 	//增
@@ -20,5 +20,7 @@ public interface BaseDao<T> {
 	Integer	getTotalCount(DetachedCriteria dc);
 	//查 查询分页列表数据
 	List<T> getPageList(DetachedCriteria dc,Integer start,Integer pageSize);
+
+	List<T> getList(DetachedCriteria dc);
 	
 }

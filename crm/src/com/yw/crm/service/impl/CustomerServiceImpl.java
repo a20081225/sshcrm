@@ -26,7 +26,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void save(Customer customer) {
-		//
         cd.save(customer);
     }
 
@@ -48,6 +47,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteById(Long cust_id) {
         cd.delete(cust_id);
+    }
+
+    @Override
+    public List<Customer> getList(DetachedCriteria dc) {
+        return cd.getList(dc);
     }
 
     public void setCd(CustomerDao cd) {

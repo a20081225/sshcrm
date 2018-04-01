@@ -33,15 +33,10 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 	}
 
 	private Integer page;
-
 	private Integer rows;
 	public String list() throws Exception {
 		//封装离线查询对象
 		DetachedCriteria dc = DetachedCriteria.forClass(Customer.class);
-		//判断并封装参数
-		if(StringUtils.isNotBlank(customer.getCust_name())){
-			dc.add(Restrictions.like("cust_name", "%"+customer.getCust_name()+"%"));
-		}
 		//1 调用Service查询分页数据(PageBean)
 		PageBean pb = cs.getPageBean(dc,page,rows);
 		//2 将PageBean放入request域,转发到列表页面显示
@@ -121,9 +116,16 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 		if(StringUtils.isNotBlank(customer.getCust_name())){
 			dc.add(Restrictions.like("cust_name", "%"+customer.getCust_name()+"%"));
 		}
-		PageBean pb = cs.getPageBean(dc,page,rows);
-		ActionContext.getContext().put("pageBean", pb);
-		return "toSelect";
+		List<Customer> list = cs.getList(dc);
+//		ActionContext.getContext().put("pageBean", pb);
+//		Map map  = new HashMap();
+//		map.put("total", pb.getTotalCount());
+//		map.put("rows", pb.getList());
+		//将map转换为json
+		String json = JSON.toJSONString(list, SerializerFeature.DisableCircularReferenceDetect);
+		ServletActionContext.getResponse().setContentType("text/html;charset=utf-8");
+		ServletActionContext.getResponse().getWriter().write(json);
+		return null;
 	}
 
 	//统计

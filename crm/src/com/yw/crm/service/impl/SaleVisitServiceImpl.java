@@ -39,6 +39,11 @@ public class SaleVisitServiceImpl implements SaleVisitService {
         svd.update(saleVisit);
     }
 
+    @Override
+    public void deleteById(String visit_id) {
+        svd.delete(visit_id);
+    }
+
     public void setSvd(SaleVisitDao svd) {
 		this.svd = svd;
 	}

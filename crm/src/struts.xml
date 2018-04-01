@@ -45,7 +45,7 @@
             <result name="toHome" type="redirect" >/index.jsp</result>
             <result name="error" >/error.jsp</result>
             <!--<result name="regist" >/error.jsp</result>-->
-            <allowed-methods>login,regist,list,toEdit,update,delete</allowed-methods>
+            <allowed-methods>login,regist,list,toEdit,update,delete,toSelect</allowed-methods>
         </action>
 
         <action name="CustomerAction_*" class="customerAction" method="{1}" >
@@ -59,7 +59,7 @@
                 <param name="actionName">CustomerAction_list</param>
             </result>
             <result name="industryCount"  >/jsp/customer/industryCount.jsp</result>
-            <allowed-methods>list,add,update,toEdit,toSelect,industryCount,search</allowed-methods>
+            <allowed-methods>list,add,update,toEdit,toSelect,industryCount,search,delete</allowed-methods>
         </action>
 
         <action name="LinkManAction_*" class="linkManAction" method="{1}" >
@@ -69,17 +69,18 @@
                 <param name="namespace">/</param>
                 <param name="actionName">LinkManAction_list</param>
             </result>
-            <allowed-methods>list,add,update,toEdit</allowed-methods>
+            <allowed-methods>list,add,update,toEdit,delete,search</allowed-methods>
         </action>
 
         <action name="SaleVisitAction_*" class="saleVisitAction" method="{1}" >
             <result name="list"  >/jsp/salevisit/list.jsp</result>
+            <result name="error" >/error.jsp</result>
             <result name="toEdit"  >/jsp/salevisit/edit.jsp</result>
             <result name="toList" type="redirectAction"  >
                 <param name="namespace">/</param>
                 <param name="actionName">SaleVisitAction_list</param>
             </result>
-            <allowed-methods>list,add,update,toEdit</allowed-methods>
+            <allowed-methods>list,add,update,toEdit,delete,search</allowed-methods>
         </action>
         <!--数据字典-->
         <action name="BaseDictAction" class="baseDictAction" method="execute" >

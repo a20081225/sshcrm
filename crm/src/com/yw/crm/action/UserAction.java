@@ -1,16 +1,20 @@
 package com.yw.crm.action;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 import com.yw.crm.domain.User;
 import com.yw.crm.service.UserService;
 import com.yw.crm.utils.PageBean;
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserAction extends ActionSupport implements ModelDriven<User> {
@@ -126,6 +130,20 @@ public class UserAction extends ActionSupport implements ModelDriven<User> {
 		ServletActionContext.getResponse().getWriter().write(json);
 		return null;
 	}
+
+	public String toSelect() throws Exception {
+		DetachedCriteria dc = DetachedCriteria.forClass(User.class);
+		if(StringUtils.isNotBlank(user.getUser_name())){
+			dc.add(Restrictions.like("user_name", "%"+user.getUser_name()+"%"));
+		}
+		List<User> list = userService.getList(dc);
+		//将map转换为json
+		String json = JSON.toJSONString(list, SerializerFeature.DisableCircularReferenceDetect);
+		ServletActionContext.getResponse().setContentType("text/html;charset=utf-8");
+		ServletActionContext.getResponse().getWriter().write(json);
+		return null;
+	}
+
 
 	@Override
 	public User getModel() {

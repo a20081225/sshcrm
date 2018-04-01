@@ -19,4 +19,7 @@ public interface CustomerService {
 	List<Object[]> getIndustryCount();
 
     void deleteById(Long cust_id);
+
+	List<Customer> getList(DetachedCriteria dc);
+
 }

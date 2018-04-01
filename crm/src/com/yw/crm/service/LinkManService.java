@@ -1,6 +1,5 @@
 package com.yw.crm.service;
 
-import com.yw.crm.domain.Customer;
 import com.yw.crm.domain.LinkMan;
 import com.yw.crm.utils.PageBean;
 import org.hibernate.criterion.DetachedCriteria;
@@ -14,4 +13,6 @@ public interface LinkManService {
     LinkMan getById(Long lkm_id);
 	//修改
 	void update(LinkMan linkMan);
+
+    void deleteById(Long lkm_id);
 }

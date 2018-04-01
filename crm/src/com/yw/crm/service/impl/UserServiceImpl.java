@@ -94,6 +94,10 @@ public class UserServiceImpl implements UserService {
 		ud.delete(user_id);
 	}
 
+    @Override
+    public List<User> getList(DetachedCriteria dc) {
+        return ud.getList(dc);
+    }
 
 
 }

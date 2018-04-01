@@ -13,4 +13,6 @@ public interface SaleVisitService {
 	SaleVisit getById(String visit_id);
 	//修改
 	void update(SaleVisit saleVisit);
+
+    void deleteById(String visit_id);
 }

@@ -1,10 +1,7 @@
 package com.yw.crm.service.impl;
 
-import com.yw.crm.dao.CustomerDao;
 import com.yw.crm.dao.LinkManDao;
-import com.yw.crm.domain.Customer;
 import com.yw.crm.domain.LinkMan;
-import com.yw.crm.service.CustomerService;
 import com.yw.crm.service.LinkManService;
 import com.yw.crm.utils.PageBean;
 import org.hibernate.criterion.DetachedCriteria;
@@ -40,6 +37,11 @@ public class LinkManServiceImpl implements LinkManService {
     @Override
     public void update(LinkMan linkMan) {
         lmd.update(linkMan);
+    }
+
+    @Override
+    public void deleteById(Long lkm_id) {
+        lmd.delete(lkm_id);
     }
 
     public void setLmd(LinkManDao lmd) {

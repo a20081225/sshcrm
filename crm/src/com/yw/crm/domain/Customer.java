@@ -1,5 +1,7 @@
 package com.yw.crm.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,6 +56,7 @@ public class Customer {
 
 	//拜访记录
 	private Set<SaleVisit> saleVisits = new HashSet<SaleVisit>();
+	@JSONField(serialize=false)
 	public Set<SaleVisit> getSaleVisits() {
 		return saleVisits;
 	}
